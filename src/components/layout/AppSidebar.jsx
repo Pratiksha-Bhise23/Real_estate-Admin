@@ -1,17 +1,19 @@
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   Home, Users, UserPlus, FolderClosed, Building, 
-  Tag, Award, Activity, ChevronDown, ChevronUp, Menu
+  // Tag, Award, Activity, ChevronDown, ChevronUp, Menu
+   Tag, Award, Activity, Menu
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  // SidebarGroup,
+  // SidebarGroupContent,
+  // SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -46,49 +48,53 @@ const NavItem = ({ to, icon, label, badge }) => {
   );
 };
 
-const NavGroup = ({ label, children, defaultOpen = false }) => {
-  const [open, setOpen] = useState(defaultOpen);
+// const NavGroup = ({ label, children, defaultOpen = false }) => {
+//   const [open, setOpen] = useState(defaultOpen);
+//   const { state } = useSidebar();
+//   const isCollapsed = state === "collapsed";
+
+//   if (isCollapsed) {
+//     return <>{children}</>;
+//   }
+
+//   return (
+//     <SidebarGroup>
+//       <div onClick={() => setOpen(!open)} className="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-100 rounded-md">
+//         <SidebarGroupLabel className="text-sm text-slate-500 font-medium">
+//           {label}
+//         </SidebarGroupLabel>
+//         {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+//       </div>
+//       {open && (
+//         <SidebarGroupContent>
+//           <SidebarMenu>
+//             {children}
+//           </SidebarMenu>
+//         </SidebarGroupContent>
+//       )}
+//     </SidebarGroup>
+//   );
+// };
+
+// export const AppSidebar = () => {
+//   const { state, toggleSidebar } = useSidebar();
+//   const isCollapsed = state === "collapsed";
+//   const location = useLocation();
+
+//   // Check if any route in the real estate group is active
+//   const isRealEstateActive = [
+//     "/properties",
+//     "/agents",
+//     "/categories",
+//     "/commissions",
+//     "/offers",
+//     "/grades",
+//   ].some(path => location.pathname.startsWith(path));
+
+
+  export const AppSidebar = () => {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
-
-  if (isCollapsed) {
-    return <>{children}</>;
-  }
-
-  return (
-    <SidebarGroup>
-      <div onClick={() => setOpen(!open)} className="flex items-center justify-between p-3 cursor-pointer hover:bg-slate-100 rounded-md">
-        <SidebarGroupLabel className="text-sm text-slate-500 font-medium">
-          {label}
-        </SidebarGroupLabel>
-        {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </div>
-      {open && (
-        <SidebarGroupContent>
-          <SidebarMenu>
-            {children}
-          </SidebarMenu>
-        </SidebarGroupContent>
-      )}
-    </SidebarGroup>
-  );
-};
-
-export const AppSidebar = () => {
-  const { state, toggleSidebar } = useSidebar();
-  const isCollapsed = state === "collapsed";
-  const location = useLocation();
-
-  // Check if any route in the real estate group is active
-  const isRealEstateActive = [
-    "/properties",
-    "/agents",
-    "/categories",
-    "/commissions",
-    "/offers",
-    "/grades",
-  ].some(path => location.pathname.startsWith(path));
-
   return (
     <Sidebar
       className={cn("border-r", isCollapsed ? "w-20" : "w-64")}
@@ -119,12 +125,12 @@ export const AppSidebar = () => {
             icon={<Users size={20} />} 
             label="User Management"
           />
-        </SidebarMenu>
+        {/* </SidebarMenu>
 
         <NavGroup 
           label="REAL ESTATE" 
           defaultOpen={isRealEstateActive}
-        >
+        > */}
           <NavItem 
             to="/agents" 
             icon={<UserPlus size={20} />} 
@@ -156,7 +162,8 @@ export const AppSidebar = () => {
             icon={<Award size={20} />} 
             label="Grades"
           />
-        </NavGroup>
+        {/* </NavGroup> */}
+        </SidebarMenu>
       </SidebarContent>
     </Sidebar>
   );
