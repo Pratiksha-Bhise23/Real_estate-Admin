@@ -1,3 +1,4 @@
+
 // import React, { createContext, useContext, useState, useEffect } from "react";
 // import authService, { LoginCredentials, AuthResponse } from "@/services/authService";
 // import { toast } from "@/components/ui/use-toast";
@@ -25,34 +26,33 @@
   
 //   useEffect(() => {
 //     // Check if user is logged in from local storage
-//     const currentUser = authService.getCurrentUser();
-//     if (currentUser) {
-//       setUser(currentUser);
+//     try {
+//       const currentUser = authService.getCurrentUser();
+//       if (currentUser) {
+//         setUser(currentUser);
+//       }
+//     } catch (error) {
+//       console.error("Error checking authentication state:", error);
+//     } finally {
+//       setIsLoading(false);
 //     }
-//     setIsLoading(false);
 //   }, []);
 
 //   const login = async (email: string, password: string): Promise<void> => {
 //     setIsLoading(true);
     
 //     try {
-//       // console.log("Login attempt with:", { email, password });
 //       const response: AuthResponse = await authService.login({ email, password });
-//       // console.log("Login response:", response);
-//       const { token, user } = response;
+//       const { token } = response;
       
 //       // Save token and user to local storage
 //       localStorage.setItem("token", token);
 //       localStorage.setItem("user", JSON.stringify(user));
-//       //  localStorage.setItem("token", response.token);
-//       // localStorage.setItem("user", JSON.stringify(response.user));
       
-//       //  setUser(response.user);
 //       setUser(user);
 //       toast({
 //         title: "Login Successful",
-//         // description: `Welcome back, ${user?.name || user?.email || 'Admin'}`,
-//         description: `Welcome back, sa`,
+//         description: `Welcome back, ${user?.name || user?.email || 'Admin'}`,
 //       });
 //     } catch (error: any) {
 //       console.error("Login error:", error);
@@ -110,9 +110,11 @@
 // };
 
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import authService, { LoginCredentials, AuthResponse } from "@/services/authService";
 import { toast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -127,6 +129,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  checkAuthStatus: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -134,27 +137,39 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   
-  useEffect(() => {
-    // Check if user is logged in from local storage
+  const checkAuthStatus = useCallback(() => {
     try {
-      const currentUser = authService.getCurrentUser();
-      if (currentUser) {
-        setUser(currentUser);
+      const token = localStorage.getItem("token");
+      const userStr = localStorage.getItem("user");
+      
+      if (token && userStr) {
+        const user = JSON.parse(userStr);
+        setUser(user);
+      } else {
+        setUser(null);
       }
     } catch (error) {
       console.error("Error checking authentication state:", error);
+      setUser(null);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     } finally {
       setIsLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
 
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     
     try {
       const response: AuthResponse = await authService.login({ email, password });
-      const { token } = response;
+      const { token, user } = response;
       
       // Save token and user to local storage
       localStorage.setItem("token", token);
@@ -183,6 +198,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await authService.logout();
       setUser(null);
+      navigate("/login", { replace: true });
       toast({
         title: "Logged Out",
         description: "You have been successfully logged out.",
@@ -204,7 +220,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         isLoading,
         login,
-        logout
+        logout,
+        checkAuthStatus
       }}
     >
       {children}

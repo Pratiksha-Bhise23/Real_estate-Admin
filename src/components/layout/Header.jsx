@@ -1,6 +1,7 @@
 
 import React from "react";
-import { Bell, Search, User, Building, Activity } from "lucide-react";
+import { Bell, Search, User, Building, Activity, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,6 +17,12 @@ import {
 } from "@/components/ui/sidebar";
 
 export const Header = () => {
+  const { user, logout } = useAuth();
+  
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <header className="flex h-16 items-center justify-between border-b px-4 lg:px-6">
       <div className="flex items-center gap-4">
@@ -104,10 +111,10 @@ export const Header = () => {
             <button className="flex items-center gap-2">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarFallback>{user?.name?.slice(0, 2)?.toUpperCase() || "U"}</AvatarFallback>
               </Avatar>
               <div className="hidden lg:block text-left">
-                <p className="text-sm font-medium">John Doe</p>
+                <p className="text-sm font-medium">{user?.name || "User"}</p>
                 <p className="text-xs text-slate-500">Admin</p>
               </div>
             </button>
@@ -119,7 +126,10 @@ export const Header = () => {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="text-red-500">
+              <LogOut className="mr-2 h-4 w-4" />
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

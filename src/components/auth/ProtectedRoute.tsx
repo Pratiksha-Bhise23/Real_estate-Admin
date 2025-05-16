@@ -53,14 +53,45 @@
 
 // export default ProtectedRoute;
 
+//16/05/25
+// import React from "react";
+// import { Navigate, Outlet } from "react-router-dom";
+// import { useAuth } from "@/hooks/useAuth";
 
-import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+// const ProtectedRoute: React.FC = () => {
+//   const { isAuthenticated, isLoading } = useAuth();
+  
+//   // If authentication is still loading, show loading indicator
+//   if (isLoading) {
+//     return <div className="h-screen flex items-center justify-center">Loading...</div>;
+//   }
+  
+//   // If not authenticated, redirect to login page
+//   if (!isAuthenticated) {
+//     return <Navigate to="/login" replace />;
+//   }
+  
+//   // If authenticated, render the protected route
+//   return <Outlet />;
+// };
+
+// export default ProtectedRoute;
+
+
+
+import React, { useEffect } from "react";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, checkAuthStatus } = useAuth();
+  const navigate = useNavigate();
   
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
+
   // If authentication is still loading, show loading indicator
   if (isLoading) {
     return <div className="h-screen flex items-center justify-center">Loading...</div>;
