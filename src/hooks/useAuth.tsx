@@ -154,7 +154,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     try {
       const response: AuthResponse = await authService.login({ email, password });
-      const { token, user } = response;
+      const { token } = response;
       
       // Save token and user to local storage
       localStorage.setItem("token", token);

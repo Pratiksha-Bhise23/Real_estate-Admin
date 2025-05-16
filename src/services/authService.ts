@@ -143,16 +143,16 @@ const authService = {
       // Construct user object from token payload
       // In a real app, the server would return user details
       // Here we're creating a mock user since your API only returns token
-      const user = {
-        id: "1", // This would come from the token payload in a real scenario
-        name: "Admin User",
-        email: credentials.email,
-        role: "admin",
-      };
+      // const user = {
+      //   id: "1", // This would come from the token payload in a real scenario
+      //   name: "Admin User",
+      //   email: credentials.email,
+      //   role: "admin",
+      // };
       
       return {
         token: response.data.token,
-        user,
+        user: response.data.user,
         expiresIn: response.data.expiresIn
       };
     } catch (error) {
