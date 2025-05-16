@@ -30,7 +30,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 const ProtectedRoute: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const location = useLocation(); // This was missing proper usage
+  const location = useLocation();
   
   // If authentication is still loading, show loading indicator
   if (isLoading) {
