@@ -1,4 +1,3 @@
-
 import api from "./api";
 
 export interface LoginCredentials {
@@ -18,22 +17,22 @@ export interface AuthResponse {
 
 const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    try {
-      const response = await api.post("/admin/login", credentials);
-      console.log("Login API response:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Login API error:", error);
-      throw error;
-    }
+    const response = await api.post<AuthResponse>("/admin/login", credentials);
+
+    const { token, user } = response.data;
+
+    // ✅ Store in localStorage
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    return response.data;
   },
-  
+
   logout: async (): Promise<void> => {
-    // For JWT, we just remove the token from storage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
   },
-  
+
   getCurrentUser: (): any => {
     const userString = localStorage.getItem("user");
     if (userString) {
