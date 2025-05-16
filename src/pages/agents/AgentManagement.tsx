@@ -595,9 +595,9 @@ export const AgentManagement = () => {
       return;
     }
     
-    if (isEditMode && currentAgent.agent_id) {
+    if (isEditMode && currentAgent?.id) {
       updateAgentMutation.mutate({ 
-        id: currentAgent.agent_id, 
+        id: currentAgent.id, 
         data: currentAgent 
       });
     } else {
@@ -804,7 +804,7 @@ export const AgentManagement = () => {
               </TableRow>
             ) : (
               filteredAgents.map((agent) => (
-                <TableRow key={agent.agent_id}>
+                <TableRow key={agent.id}>
                   <TableCell className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback>
@@ -853,7 +853,7 @@ export const AgentManagement = () => {
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Details
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(agent.agent_id)}>
+                        <DropdownMenuItem onClick={() => handleDelete(agent.id)}>
                           <Trash2 className="h-4 w-4 mr-2" />
                           Delete Agent
                         </DropdownMenuItem>
