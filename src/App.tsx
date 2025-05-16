@@ -34,7 +34,7 @@ const App = () => (
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
               <Route element={<DashboardLayout />}>
-                <Route path="/" element={<Index />} />
+                <Route path="/dashboard" element={<Index />} />
                 <Route path="/users" element={<UserManagement />} />
                 <Route path="/agents" element={<AgentManagement />} />
                 <Route path="/categories" element={<CategoryManagement />} />
