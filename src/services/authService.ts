@@ -18,8 +18,14 @@ export interface AuthResponse {
 
 const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await api.post("/admin/login", credentials);
-    return response.data;
+    try {
+      const response = await api.post("/admin/login", credentials);
+      console.log("Login API response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Login API error:", error);
+      throw error;
+    }
   },
   
   logout: async (): Promise<void> => {
