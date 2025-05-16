@@ -36,23 +36,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     
     try {
-      console.log("Login attempt with:", { email, password });
+      // console.log("Login attempt with:", { email, password });
       const response: AuthResponse = await authService.login({ email, password });
-      console.log("Login response:", response);
+      // console.log("Login response:", response);
       const { token, user } = response;
       
       // Save token and user to local storage
-      // localStorage.setItem("token", token);
-      // localStorage.setItem("user", JSON.stringify(user));
-       localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      //  localStorage.setItem("token", response.token);
+      // localStorage.setItem("user", JSON.stringify(response.user));
       
-       setUser(response.user);
-      // setUser(user);
+      //  setUser(response.user);
+      setUser(user);
       toast({
         title: "Login Successful",
-        description: `Welcome back, ${user?.name || user?.email || 'Admin'}`,
-        // description: `Welcome back, sa`,
+        // description: `Welcome back, ${user?.name || user?.email || 'Admin'}`,
+        description: `Welcome back, sa`,
       });
     } catch (error: any) {
       console.error("Login error:", error);
